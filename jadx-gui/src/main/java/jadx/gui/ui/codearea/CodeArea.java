@@ -1,10 +1,13 @@
 package jadx.gui.ui.codearea;
 
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.*;
+import javax.swing.event.MenuKeyEvent;
+import javax.swing.event.MenuKeyListener;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -79,10 +82,28 @@ public final class CodeArea extends AbstractCodeArea {
 
 	private void addMenuItems() {
 		FindUsageAction findUsage = new FindUsageAction(this);
+		CopyFridaTraceHook copyFridaTraceHook = new CopyFridaTraceHook(this);
 		GoToDeclarationAction goToDeclaration = new GoToDeclarationAction(this);
 		RenameAction rename = new RenameAction(this);
 
 		JPopupMenu popup = getPopupMenu();
+		popup.addMenuKeyListener(new MenuKeyListener(){
+
+			public void menuKeyTyped(MenuKeyEvent e) {
+
+			}
+
+			public void menuKeyPressed(MenuKeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_F2) {
+					rename.actionPerformed(null);
+				}
+			}
+
+			public void menuKeyReleased(MenuKeyEvent e) {
+
+			}});
+		popup.addSeparator();
+		popup.add(copyFridaTraceHook);
 		popup.addSeparator();
 		popup.add(findUsage);
 		popup.add(goToDeclaration);
@@ -90,6 +111,7 @@ public final class CodeArea extends AbstractCodeArea {
 		popup.addPopupMenuListener(findUsage);
 		popup.addPopupMenuListener(goToDeclaration);
 		popup.addPopupMenuListener(rename);
+		popup.addPopupMenuListener(copyFridaTraceHook);
 	}
 
 	public int adjustOffsetForToken(@Nullable Token token) {

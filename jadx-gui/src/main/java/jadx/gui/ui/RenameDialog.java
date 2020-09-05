@@ -311,7 +311,7 @@ public class RenameDialog extends JDialog {
 
 		setTitle(NLS.str("popup.rename"));
 		pack();
-		setSize(800, 80);
+		setSize(800, 160);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setModalityType(ModalityType.MODELESS);
