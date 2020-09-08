@@ -17,11 +17,11 @@ import jadx.gui.utils.NLS;
 
 import javax.swing.JOptionPane;
 
-public final class CopyFridaTraceHook extends JNodeMenuAction<JNode> {
-	private static final long serialVersionUID = 4692546569977976385L;
+public final class CopyFridaAMIAction extends JNodeMenuAction<JNode> {
+	private static final long serialVersionUID = 4692546569977976322L;
 
-	public CopyFridaTraceHook(CodeArea codeArea) {
-		super(NLS.str("popup.copy_frida_trace_hook"), codeArea);
+	public CopyFridaAMIAction(CodeArea codeArea) {
+		super(NLS.str("popup.copy_frida_ami_action"), codeArea);
 	}
 
 	@Override
@@ -51,13 +51,30 @@ public final class CopyFridaTraceHook extends JNodeMenuAction<JNode> {
 				id = javaClass.getRawName();
 			}
 		} else if (node instanceof JPackage) {
-			JOptionPane.showMessageDialog(null, "Cannot trace packages :(", "Error", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Cannot AMI packages :(", "Error", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 
-        StringSelection selection = new StringSelection(String.format("%s('%s');", traceCommand, id));
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
+		boolean isStatic = true;
+		int paramCount = 3;
+		String[] argTypes = {"WebView", "String", "String"};
+		String returnType = "String";
+
+		String output = String.format("// This %s function has %d param%s of type: %s\n",
+				isStatic ? "static" : "instanced",
+				paramCount,
+				paramCount == 1 ? "" : "s",
+				String.join(", ", argTypes)
+				);
+		if (returnType != "") {
+			output += String.format("// The function returns %s\n", returnType);
+		}
+		output += "Java.perform(() => {\n";
+		output += "});";
+
+		StringSelection selection = new StringSelection(String.format("%s('%s');", traceCommand, id));
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(selection, selection);
 	}
 
 	@Nullable

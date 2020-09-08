@@ -83,15 +83,13 @@ public final class CodeArea extends AbstractCodeArea {
 	private void addMenuItems() {
 		FindUsageAction findUsage = new FindUsageAction(this);
 		CopyFridaTraceHook copyFridaTraceHook = new CopyFridaTraceHook(this);
+		CopyFridaAMIAction copyFridaAMIAaction = new CopyFridaAMIAction(this);
 		GoToDeclarationAction goToDeclaration = new GoToDeclarationAction(this);
 		RenameAction rename = new RenameAction(this);
 
 		JPopupMenu popup = getPopupMenu();
 		popup.addMenuKeyListener(new MenuKeyListener(){
-
-			public void menuKeyTyped(MenuKeyEvent e) {
-
-			}
+			public void menuKeyTyped(MenuKeyEvent e) {}
 
 			public void menuKeyPressed(MenuKeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_F2) {
@@ -99,11 +97,10 @@ public final class CodeArea extends AbstractCodeArea {
 				}
 			}
 
-			public void menuKeyReleased(MenuKeyEvent e) {
-
-			}});
+			public void menuKeyReleased(MenuKeyEvent e) { }});
 		popup.addSeparator();
 		popup.add(copyFridaTraceHook);
+		popup.add(copyFridaAMIAaction);
 		popup.addSeparator();
 		popup.add(findUsage);
 		popup.add(goToDeclaration);
@@ -112,6 +109,7 @@ public final class CodeArea extends AbstractCodeArea {
 		popup.addPopupMenuListener(goToDeclaration);
 		popup.addPopupMenuListener(rename);
 		popup.addPopupMenuListener(copyFridaTraceHook);
+		popup.addPopupMenuListener(copyFridaAMIAaction);
 	}
 
 	public int adjustOffsetForToken(@Nullable Token token) {
